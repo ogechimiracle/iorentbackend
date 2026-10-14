@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker";
 import * as bcrypt from "bcrypt"
 import { db } from "../db";
-import { usersTable } from "../db/schema/schema";
+import { users } from "../db/schema/identity";
 import { randomUUID } from "node:crypto";
 
 async function seed(){
@@ -10,12 +10,12 @@ async function seed(){
 
    const hashPassword = await bcrypt.hash(password,12)
 
-   const admin = await db.insert(usersTable)
+   const admin = await db.insert(users)
    .values({
       id: randomUUID(),
       name: faker.person.fullName(),
       email: faker.internet.email().toLocaleLowerCase(),
-      password:hashPassword,
+      passwordHash:hashPassword,
       role:"admin"
    }).returning()
 

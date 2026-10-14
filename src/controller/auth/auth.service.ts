@@ -1,5 +1,5 @@
 
-import { usersTable, type NewUser, type User } from "../../db/schema/schema";
+import { users} from "../../db/schema/identity";
 import {db} from "../../db"
 import { eq, sql } from "drizzle-orm";
 import { randomUUID } from "node:crypto";
@@ -7,12 +7,12 @@ import * as bcrypt from "bcrypt"
 
 
 
-export const CreateUserService = async (data:NewUser)=>{
+export const CreateUserService = async (data:any)=>{
      try {
-           const [newUser] = await db.insert(usersTable).values({
+           const [newUser] = await db.insert(users).values({
                  ...data,
                  id: randomUUID(),
-                 password: await bcrypt.hash(data.password, 12)
+                 passwordHash: await bcrypt.hash(data.password, 12)
            }).returning()
 
            const dt = {
@@ -32,7 +32,7 @@ export const CreateUserService = async (data:NewUser)=>{
 
 export const getUser = async(email:string)=>{
       try {
-            const [User] = await db.select().from(usersTable).where(eq(usersTable.email, email)).limit(1)
+            const [User] = await db.select().from(users).where(eq(users.email, email)).limit(1)
             return User
       } catch (error) {
           console.error(error)  

@@ -34,7 +34,7 @@ export const LoginUserController = async (req:Request, res:Response)=>{
          return res.status(200).send({message:"User with credentials not found", status:false})
       }
 
-      const isPasswordValide = await bcrypt.compare(password, user.password)
+      const isPasswordValide = await bcrypt.compare(password, user.passwordHash)
 
       if(isPasswordValide){
 
