@@ -1,5 +1,5 @@
 import { db } from "../../db"
-import { vehicleCategories } from "../../db/schema"
+import { vehicleCategories, vehicleMakes } from "../../db/schema"
 import { randomUUID } from "node:crypto";
 
 
@@ -23,6 +23,28 @@ export const getCategoryService = async ()=>{
       const data = await db.select().from(vehicleCategories)
       return data
    } catch (error:any) {
+      console.log(error.message)
+   }
+}
+
+export const createMakeService = async (name:string, slug:string)=>{
+   try {
+      const data = await db.insert(vehicleMakes).values({
+         id:randomUUID(),
+         name:name,
+         slug:slug
+      }).returning()
+      return data
+   } catch (error:any) {
+      console.log(error.message)
+   }
+}
+
+export const getCarMakeService = async () => {
+   try {
+      const data = await db.select().from(vehicleMakes)
+      return data
+   } catch (error: any) {
       console.log(error.message)
    }
 }
